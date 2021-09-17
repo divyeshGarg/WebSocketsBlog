@@ -1,8 +1,11 @@
+const path = require('path');
 const http = require('http');
 const crypto = require('crypto');
+const static = require('node-static');
 const constants = require('./src/utils/constants');
 const WebSocketServer = require('websocket').server
 
+const PORT = constants.PORT || 8080;
 let connections = {};
 let counts = {
     0: 0,
@@ -18,8 +21,14 @@ let counts = {
 };
 let data = {counts: counts, max: getMax()};
 
+// To deploy to heroku
+let file = new(static.Server)(__dirname+'/../frontend/build/');
+
 const server = http.createServer((req, res) => {
     console.log('Server created!')
+    file.serve(req, res);
+}).listen(PORT, () => {
+    console.log(`backend server started on port ${PORT}`);
 });
 
 const websocket = new WebSocketServer({
@@ -64,7 +73,3 @@ function getMax() {
 websocket.on('connect', e => {
     console.log('connection accepted')
 })
-
-server.listen(constants.PORT, () => {
-    console.log(`backend server started on port ${constants.PORT}`);
-});
