@@ -22,7 +22,7 @@ let counts = {
 let data = {counts: counts, max: getMax()};
 
 // To deploy to heroku
-let file = new(static.Server)(__dirname+'/../frontend/build/');
+let file = new(static.Server)(__dirname+'/../build/');
 
 const server = http.createServer((req, res) => {
     file.serve(req, res);
