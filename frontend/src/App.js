@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
-import constants from './utils/constants';
 
-const client = new W3CWebSocket(constants.BACKEND_SERVER_URI);
+const client = new W3CWebSocket(window.location.origin.replace(/^http/, 'ws'));
+
 
 function App() {
   let [data, setData] = useState({});

@@ -25,7 +25,6 @@ let data = {counts: counts, max: getMax()};
 let file = new(static.Server)(__dirname+'/../frontend/build/');
 
 const server = http.createServer((req, res) => {
-    console.log('Server created!')
     file.serve(req, res);
 }).listen(PORT, () => {
     console.log(`backend server started on port ${PORT}`);
@@ -36,31 +35,45 @@ const websocket = new WebSocketServer({
 })
 
 websocket.on('request', request => {
-    console.log(request.origin)
     let connection = request.accept(null, request.origin)
     let userId = ''
     crypto.randomBytes(8, (err, buf) => {
         userId = buf.toString('hex');
         connections[userId] = connection
-        for (const id in connections) {
-            console.log('>>>',id)
-        }
+        // printConnections();
         // Send data when client connects initially
         connection.send(JSON.stringify(data))
     })
     connection.on('close', () => {
         console.log('connection closed', userId)
         delete connections[userId]
+        // printConnections();
     })
     connection.on('message', message => {
         console.log('received => ', message['utf8Data'])
-        counts[message['utf8Data']] += 1
+        if(message['utf8Data'] == 'clear') {
+            clearCounts();
+        } else {
+            counts[message['utf8Data']] += 1
+        }
         data = {counts: counts, max: getMax()}
         for (const id in connections) {
             connections[id].send(JSON.stringify(data))
         }
     })
 })
+
+function clearCounts() {
+    for (const num in counts) {
+        counts[num] = 0;
+    }
+}
+
+function printConnections() {
+    for (const id in connections) {
+        console.log('>>>',id)
+    }
+}
 
 function getMax() {
     let max = 0;
