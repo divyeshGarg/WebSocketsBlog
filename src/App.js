@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 
+//For Production build (backend and frontend will run on same port)
 const client = new W3CWebSocket(window.location.origin.replace(/^http/, 'ws'));
 
+//If running on dev environment
+//const client = new W3CWebSocket('ws://localhost:8080');
 
 function App() {
   let [data, setData] = useState({});
@@ -47,6 +50,11 @@ function App() {
         1. Open <a href={window.location.href} target='_blank'>this page</a> in multiple tabs/devices.
         <br /><br />
         2. Click the buttons and notice the counts getting updated without manually refreshing the page
+        <br /><br />
+        3. Code is available <a href={'https://github.com/divyeshGarg/WebSocketsBlog'} target='_blank'>here</a>
+        <br /><br />
+        4. You can also view my <a href={'https://dgtalhaven.wordpress.com/2021/09/21/websockets-intro'} 
+        target='_blank'>blog-post on WebSockets</a>
       </div>
     </div>
   );

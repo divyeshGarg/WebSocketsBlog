@@ -2,7 +2,7 @@ const path = require('path');
 const http = require('http');
 const crypto = require('crypto');
 const static = require('node-static');
-const constants = require('./src/utils/constants');
+const constants = require('./constants');
 const WebSocketServer = require('websocket').server
 
 const PORT = constants.PORT || 8080;
